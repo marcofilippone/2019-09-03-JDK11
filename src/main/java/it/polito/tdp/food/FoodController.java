@@ -5,6 +5,7 @@
 package it.polito.tdp.food;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import it.polito.tdp.food.model.Arco;
@@ -51,7 +52,33 @@ public class FoodController {
     @FXML
     void doCammino(ActionEvent event) {
     	txtResult.clear();
-    	txtResult.appendText("Cerco cammino peso massimo...");
+    	if(!creato) {
+    		txtResult.setText("Devi prima creare il grafo");
+    		return;
+    	}
+    	String n = txtPassi.getText();
+    	Integer N;
+    	try {
+    		N = Integer.parseInt(n);
+    	} catch(NumberFormatException e) {
+    		txtResult.setText("Inserire un numero intero di passi");
+    		return;
+    	}
+    	String s = boxPorzioni.getValue();
+    	if(s==null || s.equals("")) {
+    		txtResult.setText("Scegliere un vertice dalla tendina");
+    		return;
+    	}
+    	List<String> cammino = model.cammino(N, s);
+    	txtResult.appendText("Cerco cammino peso massimo...\n\n");
+    	if(cammino.size()==1) {
+    		txtResult.appendText("Cammino non esistente");
+    	} else {
+    		for(String v : cammino) {
+        		txtResult.appendText(v+"\n");
+        	}
+    		txtResult.appendText("\nPeso totale: "+model.getPesoTot());
+    	}
     }
 
     @FXML
